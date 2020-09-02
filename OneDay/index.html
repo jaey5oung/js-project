@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS Drum Kit</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="keys">
+      <div data-key="65" class="key"><kbd>A</kbd> <span class="sound">clap</span></div>
+      <div data-key="83" class="key"><kbd>S</kbd> <span class="sound">hihat</span></div>
+      <div data-key="68" class="key"><kbd>D</kbd> <span class="sound">kick</span></div>
+      <div data-key="70" class="key"><kbd>F</kbd> <span class="sound">openhat</span></div>
+      <div data-key="71" class="key"><kbd>G</kbd> <span class="sound">boom</span></div>
+      <div data-key="72" class="key"><kbd>H</kbd> <span class="sound">ride</span></div>
+      <div data-key="74" class="key"><kbd>J</kbd> <span class="sound">snare</span></div>
+      <div data-key="75" class="key"><kbd>K</kbd> <span class="sound">tom</span></div>
+      <div data-key="76" class="key"><kbd>L</kbd> <span class="sound">tink</span></div>
+    </div>
+    <audio data-key="65" src="sounds/clap.wav"></audio>
+    <audio data-key="83" src="sounds/hihat.wav"></audio>
+    <audio data-key="68" src="sounds/kick.wav"></audio>
+    <audio data-key="70" src="sounds/openhat.wav"></audio>
+    <audio data-key="71" src="sounds/boom.wav"></audio>
+    <audio data-key="72" src="sounds/ride.wav"></audio>
+    <audio data-key="74" src="sounds/snare.wav"></audio>
+    <audio data-key="75" src="sounds/tom.wav"></audio>
+    <audio data-key="76" src="sounds/tink.wav"></audio>
+    <script>
+      window.addEventListener("keydown", playSound)
+      function playSound(e) {
+        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`)
+        const key = document.querySelector(`.key[data-key="${e.keyCode}"]`)
+
+        if (!audio) return
+        audio.currentTime = 0
+        audio.play()
+
+        key.classList.add("playing")
+      }
+      const keys = document.querySelectorAll(".key")
+      keys.forEach((item) => {
+        item.addEventListener("transitionend", removeItem)
+
+        function removeItem(e) {
+          if (e.propertyName !== "transform") return
+          this.classList.remove("playing")
+        }
+      })
+    </script>
+  </body>
+</html>
+<!-- 
+<script>
+    //1. window 자식객체 이벤트리스너 설명      //2. querySelector 설명      //3. `audio[data-key="${e.keyCode}"` 백틱과 ""를 뺴고 로그 찍어보기
+  window.addEventListener("keydown", function (e) {        const audio = document.querySelector(`audio[data-key="${e.keyCode}"`);        //4. 오디오를 완성했으니 애니메이션효과를 입히기 위해 div태그를 불러온다        const key = document.querySelector(`.key[data-key="${e.keyCode}"`);
+    //1.audio태그중 지정하지 않은 키를 누를 경우 함수를 종료한다.        if (!audio) return;
+    //3.currentTime은 자바스크립트 propertype        audio.currentTime = 0;
+    //2.이렇게하면 실행은 되지만 한키를 연속으로 누를경우 소리가 1번만 나기때문에 시간을 설정해주어야함.        audio.play();
+    //5. css입히기        key.classList.add("playing");      });
+  function removeTransition(e) {        //8. 그중 transform 이벤트를 제거해야함.        if (e.propertyName !== "transform") return;
+    //9. 로그 찍어보면 transform 이 찍힘 transform은 css에서 transition이 일어난후임        // console.log(e.propertyName);
+    //10. this 찍어보기        // console.log(this);
+    //11. this를 찍으면 div 태그가 찍히는데 태그의 클래스명 삭제        this.classList.remove("playing");      }
+  //6. border제거를 위해서 queryselectall 사용      const keys = document.querySelectorAll(".key");
+  //7. 로그 찍어보면 이벤트가 6~7개정도 일어남      keys.forEach((key) =>        key.addEventListener("transitionend", removeTransition)      );
+</script> -->
